@@ -90,6 +90,15 @@ public static Result<TRes> OnSuccess<{comma_string(n)}, TRes>(this Result<{type_
     return Infrastructure.Result.Combine(Result, val).To(val.Value);
 }}
 
+public static Result OnSuccess<{comma_string(n)}>(this Result<{type_string(n)}> Result, Func<{comma_string(n)}, Result> Func)
+{{
+    if (Result.Failure)
+        return Result;
+
+    var val = Func({tuple_args(n, "Result.Value")});
+    return Infrastructure.Result.Combine(Result, val);
+}}
+
 public static Result<{type_string(n)}> Tee<{comma_string(n)}>(this Result<{type_string(n)}> x, Action<{comma_string(n)}> f)
 {{
     if (x.Success)
@@ -111,6 +120,15 @@ public static async Task<Result<TRes>> OnSuccess<{comma_string(n)}, TRes>(this R
 
     var val = await Func({tuple_args(n, "Result.Value")});
     return Infrastructure.Result.Combine(Result, val).To(val.Value);
+}}
+
+public static async Task<Result> OnSuccess<{comma_string(n)}>(this Result<{type_string(n)}> Result, Func<{comma_string(n)}, Task<Result>> Func)
+{{
+    if (Result.Failure)
+        return Result;
+
+    var val = await Func({tuple_args(n, "Result.Value")});
+    return Infrastructure.Result.Combine(Result, val);
 }}
 
 public static async Task<Result<{type_string(n)}>> TeeAsync<{comma_string(n)}>(this Result<{type_string(n)}> x, Func<{comma_string(n)}, Task> f)
